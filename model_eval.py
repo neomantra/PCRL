@@ -1,3 +1,4 @@
+import gymnasium as gym
 from stable_baselines3 import DQN
 from stable_baselines3.common.monitor import Monitor
 import pickle
@@ -23,13 +24,15 @@ print("Evaluation for best model")
 env = Monitor(env, log_dir)  # new environment for evaluation
 
 model = DQN.load(log_dir + "best_model_" + location + "_400.zip")
+seed = 1
 
-obs = env.reset()
+obs, info = env.reset(seed=seed, options={})
 done = False
 best_plan, best_node_list = None, None
 while not done:
-    action, _states = model.predict(obs, deterministic=True)
-    obs, reward, done, info = env.step(action)
+    action, _states = model.predict(obs)
+    obs, reward, terminated, truncated, info = env.step(action)
+    done = terminated or truncated
     env.render()
     if done:
         best_node_list, best_plan = env.render()

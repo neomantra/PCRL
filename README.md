@@ -11,11 +11,11 @@ This repository is the implementation of the project "Reinforcement Learning-bas
 
 
 # Installation
-We use [Stable Baselines3](https://github.com/DLR-RM/stable-baselines3) as Reinforcement training framework. Moreover, we use [Gym](https://github.com/openai/gym) to create the RL environment and [OSMnx](https://github.com/gboeing/osmnx) to work with road networks. We use Python 3.8.10.
+We use [Stable Baselines3](https://github.com/DLR-RM/stable-baselines3) as Reinforcement training framework. Moreover, we use [Gymnasium](https://gymnasium.farama.org) to create the RL environment and [OSMnx](https://github.com/gboeing/osmnx) to work with road networks. We use Python 3.8.10.
 
 To install the requirements
 ```bash
-git clone git@github.com:frantz03/PCRL.git
+git clone https://github.com/ashusao/PCRL
 pip install -r final_requirements.txt
 ```
 
@@ -27,7 +27,7 @@ evaluation can be tested.
 
 
 # Training & Evaluation
-To train a model on an example raod network run `reinforcement.py`. The custom environment
+To train a model on an example road network run `reinforcement.py`. The custom environment
 is described in `env_plus.py`.
 
 To generate a charging plan from the model run `model_eval.py`.
@@ -45,7 +45,6 @@ For the images: `Images/<location>/`
 
 For the results: `Results/<location>/`
 
+# License
 
-
-   
-
+Released under the MIT License.  See [LICENSE](./LICENSE).

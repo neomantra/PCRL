@@ -1,5 +1,5 @@
-import gym
-from gym import spaces
+import gymnasium as gym
+from gymnasium import spaces
 import numpy as np
 from stable_baselines3.common.env_checker import check_env
 import pickle
@@ -227,10 +227,11 @@ class StationPlacement(gym.Env):
         shape = (self.row_length + len(ef.CHARGING_POWER)) * len(self.node_list) + 1
         self.observation_space = spaces.Box(low=-1, high=1, shape=(shape,), dtype=np.float16)
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         """
         Reset the state of the environment to an initial state
         """
+        super().reset(seed=seed)
         self.budget = ef.BUDGET
         self.game_over = False
         self.plan_instance = Plan(self.node_list, StationPlacement.node_dict, StationPlacement.cost_dict,
@@ -245,7 +246,7 @@ class StationPlacement(gym.Env):
         self.config_dict = prepare_config()
         coverage(self.node_list, self.plan_instance.plan)
         obs = self.establish_observation()
-        return obs
+        return obs, {}
 
     def init_hilfe(self, my_node):
         StationPlacement.node_dict[my_node[0]] = {}  # prepare node_dict
@@ -345,7 +346,7 @@ class StationPlacement(gym.Env):
             self.game_over = True
         # if self.game_over:
         #     print("Best score {}.".format(self.best_score))
-        return obs, reward, self.game_over, {}
+        return obs, reward, self.game_over, False, {}
 
     def station_config_check(self, my_station):
         """
@@ -410,7 +411,7 @@ class StationPlacement(gym.Env):
         new_score = max(new_score, -25)  # if negative score
         if new_score - self.best_score > 0:
             reward += (new_score - self.best_score)
-            # avoid jojo learning
+            # avoid jojo learning -- also avoids yo-yo learning =)
             self.best_score = new_score
             self.best_plan = self.plan_instance.plan.copy()
             self.best_node_list = self.node_list.copy()
